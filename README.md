@@ -1,9 +1,8 @@
-# Fabric Example Mod
+<img src="icon.png" align="right" width="180px"/>
 
-## Setup
+# Microgravity
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
+Weightlessness and high-G environments for Minecraft using Fabric.
 
-## License
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+Not yet implemented.

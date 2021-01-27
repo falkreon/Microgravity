@@ -12,10 +12,15 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 @Mixin(ClientPlayerEntity.class)
 public class ClientPlayerMixin extends AbstractClientPlayerEntity {
+	@Shadow
+	private double lastX;
+	@Shadow
+	private double lastBaseY;
+	@Shadow
+	private double lastZ;
 	
 	public ClientPlayerMixin(ClientWorld world, GameProfile profile) {
 		super(world, profile);
@@ -26,20 +31,16 @@ public class ClientPlayerMixin extends AbstractClientPlayerEntity {
 	
 	@Inject(at = @At("HEAD"), method = "tick()V")
 	public void tickBefore(CallbackInfo info) {
-		if (world!=null && world.isClient) {
+		if (world!=null) {
 			//snapshot pos and velocity so that we can restore them later if needed
 			storedPos = getPos();
 			storedVelocity = getVelocity();
-		} else if (world!=null && !world.isClient) {
-			System.out.println(getPos());
 		}
 	}
 	
 	@Inject(at = @At(value = "INVOKE", target = "sendMovementPackets()V"), method = "tick()V")
 	public void tickDuring(CallbackInfo info) {
-		if (storedPos==null || storedVelocity==null) {
-			//System.out.println("No delta to report");
-		} else {
+		if (storedPos!=null && storedVelocity!=null) {
 			//Vec3d delta = getPos().subtract(storedPos);
 			//System.out.println("Delta position: "+delta);
 			
@@ -51,15 +52,17 @@ public class ClientPlayerMixin extends AbstractClientPlayerEntity {
 			this.lastRenderX = storedPos.x;
 			this.lastRenderY = storedPos.y;
 			this.lastRenderZ = storedPos.z;
+			this.lastX = storedPos.x;
+			this.lastBaseY = storedPos.y;
+			this.lastZ = storedPos.z;
 			
 			this.fallDistance = 0f;
 			
 			this.upwardSpeed = 0f;
 			this.horizontalSpeed = 0f;
 			
-			//this.setVelocity(0, 0, 0);
-			
-			
+			this.updatePosition(storedPos.x, storedPos.y, storedPos.z);
+			this.setVelocity(0, 0, 0);
 		}
 		storedPos = null;
 		storedVelocity = null;

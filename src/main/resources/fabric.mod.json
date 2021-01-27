@@ -1,29 +1,32 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "microgravity",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Microgravity",
+  "description": "Adds weightlessness and high-G environments",
   "authors": [
-    "Me!"
+    "Falkreon"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/falkreon/Microgravity",
+    "sources": "https://github.com/falkreon/Microgravity"
   },
 
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "license": "MIT",
+  "icon": "assets/microgravity/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "blue.endless.microgravity.Microgravity"
+    ],
+    "client": [
+		"blue.endless.microgravity.client.MicrogravityClient"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "microgravity.mixins.json"
   ],
 
   "depends": {
@@ -32,6 +35,6 @@
     "minecraft": "1.16.x"
   },
   "suggests": {
-    "another-mod": "*"
+    "flamingo": "*"
   }
 }

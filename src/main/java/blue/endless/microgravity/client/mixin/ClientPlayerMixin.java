@@ -38,7 +38,7 @@ public class ClientPlayerMixin extends AbstractClientPlayerEntity {
 		}
 	}
 	
-	@Inject(at = @At(value = "INVOKE", target = "sendMovementPackets()V"), method = "tick()V")
+	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;sendMovementPackets()V"), method = "tick()V")
 	public void tickDuring(CallbackInfo info) {
 		//if (storedPos!=null && storedVelocity!=null) {
 			//Vec3d delta = getPos().subtract(storedPos);

@@ -26,45 +26,56 @@ public class ClientPlayerMixin extends AbstractClientPlayerEntity {
 		super(world, profile);
 	}
 
-	private Vec3d storedPos;
-	private Vec3d storedVelocity;
+	private Vec3d microgravity_storedPos;
+	private Vec3d microgravity_storedVelocity;
 	
 	@Inject(at = @At("HEAD"), method = "tick()V")
 	public void tickBefore(CallbackInfo info) {
 		if (world!=null) {
 			//snapshot pos and velocity so that we can restore them later if needed
-			storedPos = getPos();
-			storedVelocity = getVelocity();
+			microgravity_storedPos = getPos();
+			microgravity_storedVelocity = getVelocity();
 		}
 	}
 	
 	@Inject(at = @At(value = "INVOKE", target = "sendMovementPackets()V"), method = "tick()V")
 	public void tickDuring(CallbackInfo info) {
-		if (storedPos!=null && storedVelocity!=null) {
+		//if (storedPos!=null && storedVelocity!=null) {
 			//Vec3d delta = getPos().subtract(storedPos);
 			//System.out.println("Delta position: "+delta);
 			
-			this.setPos(storedPos.x, storedPos.y, storedPos.z);
+			microgravity_killTickMovement();
 			
-			this.prevX = storedPos.x;
-			this.prevY = storedPos.y;
-			this.prevZ = storedPos.z;
-			this.lastRenderX = storedPos.x;
-			this.lastRenderY = storedPos.y;
-			this.lastRenderZ = storedPos.z;
-			this.lastX = storedPos.x;
-			this.lastBaseY = storedPos.y;
-			this.lastZ = storedPos.z;
+			
+		//}
+		//storedPos = null;
+		//storedVelocity = null;
+	}
+	
+	public void microgravity_killTickMovement() {
+		if (microgravity_storedPos!=null && microgravity_storedVelocity!=null) {
+			//this.setPos(microgravity_storedPos.x, microgravity_storedPos.y, microgravity_storedPos.z);
+			this.updatePosition(microgravity_storedPos.x, microgravity_storedPos.y, microgravity_storedPos.z);
+			
+			this.prevX = microgravity_storedPos.x;
+			this.prevY = microgravity_storedPos.y;
+			this.prevZ = microgravity_storedPos.z;
+			this.lastRenderX = microgravity_storedPos.x;
+			this.lastRenderY = microgravity_storedPos.y;
+			this.lastRenderZ = microgravity_storedPos.z;
+			this.lastX = microgravity_storedPos.x;
+			this.lastBaseY = microgravity_storedPos.y;
+			this.lastZ = microgravity_storedPos.z;
 			
 			this.fallDistance = 0f;
 			
 			this.upwardSpeed = 0f;
 			this.horizontalSpeed = 0f;
 			
-			this.updatePosition(storedPos.x, storedPos.y, storedPos.z);
+			//this.updatePosition(microgravity_storedPos.x, microgravity_storedPos.y, microgravity_storedPos.z);
 			this.setVelocity(0, 0, 0);
 		}
-		storedPos = null;
-		storedVelocity = null;
+		microgravity_storedPos = null;
+		microgravity_storedVelocity = null;
 	}
 }
